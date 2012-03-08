@@ -74,6 +74,10 @@ expr → term
 typ(expr) = typ(term)
 
 expr → expr PLUS term
+(expr1 = left expr, expr2 = right expr as per usual)
+typ(expr1) = int if typ(expr2) == int and typ(term) == int OR
+typ(expr1) = int* if typ(expr2) == int and typ(term) == int* OR
+typ(expr1) = int* if typ(expr2) == int* and typ(term) == int
 
 term → factor
 typ(term) = typ(factor)
@@ -86,4 +90,6 @@ typ(NUM) = int
 
 factor → ID
 typ(ID) = t if <lexeme(ID), t> in symbol_table else error
+
+factor → STAR factor
 ```
