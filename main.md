@@ -18,13 +18,13 @@ an example grammar:
 
 ```
 // part of WLPP language specification
-1. procedure → INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE 
-2. type → INT // typeof(type) = INT
-3. type → INT STAR // typeof(type) = INT STAR
-4. dcls → 
-5. dcls → dcls dcl BECOMES NUM SEMI
-6. dcls → dcls dcl BECOMES NULL SEMI
-7. dcl → type ID
+procedure → INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE 
+type → INT // typeof(type) = INT
+type → INT STAR // typeof(type) = INT STAR
+dcls → 
+dcls → dcls dcl BECOMES NUM SEMI
+dcls → dcls dcl BECOMES NULL SEMI
+dcl → type ID
 ```
 
 ## Building a symbol table
@@ -45,17 +45,17 @@ syms(procedure) = syms(dcls) + syms(dcl1) + syms(dcl2)
 // an easy one symbols for dcls - the empty set
 syms(dcls) = {}
 
-// for rule 7
+// for dcl → type ID
 syms(dcl) = { <lexeme(ID), typeof(type)> }
 ```
 
 - check to make sure that `id1 != id2` for all distinct `<id1, type1>, <id2, type2> ∈ syms(procedure)`
 - now we have the following functions:
   
-  ```
-  typeof(type) - declared type
-  typ(E) - type of any particular expression E ∈ { int, int*, error }
-  ```
+```
+typeof(type) - declared type
+typ(E) - type of any particular expression E ∈ { int, int*, error }
+```
 
 more grammar:
 
@@ -77,7 +77,7 @@ expr → expr PLUS term
 (expr1 = left expr, expr2 = right expr as per usual)
 typ(expr1) = int if typ(expr2) == int and typ(term) == int OR
 typ(expr1) = int* if typ(expr2) == int and typ(term) == int* OR
-typ(expr1) = int* if typ(expr2) == int* and typ(term) == int
+typ(expr1) = int* if typ(expr2) == int* and typ(term) == int OTHERWISE error
 
 term → factor
 typ(term) = typ(factor)
