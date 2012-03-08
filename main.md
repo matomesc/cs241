@@ -27,14 +27,14 @@ an example grammar:
 7. dcl → type ID
 ```
 
-## Build a symbol table
+## Building a symbol table
 - it will hold a collection of symbols, with information about each symbol
   - for now just: `type ∈ { int, int* }`
 - check for duplicates
 - check all __uses__ of symbols
 - type of every expression & subexpression in input
 
-symbol table: `syms(N) = { <id, type>[i] }`
+__multiset__ symbol table: `syms(N) = { <id, type>[i] }`
 
 example symbol table for the above grammar:
 
@@ -47,4 +47,24 @@ syms(dcls) = {}
 
 // for rule 7
 syms(dcl) = { <lexeme(ID), typeof(type)> }
+```
+
+- check to make sure that `id1 != id2` for all distinct `<id1, type1>, <id2, type2> ∈ syms(procedure)`
+- now we have the following:
+  
+  ```
+  typeof(type) - declared type
+  typ(E) - type of any particular expression E
+  ```
+
+more WLPP grammar:
+
+```
+statements →
+statements → statements statement  
+statement → lvalue BECOMES expr SEMI
+statement → IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE 
+statement → WHILE LPAREN test RPAREN LBRACE statements RBRACE 
+statement → PRINTLN LPAREN expr RPAREN SEMI
+statement → DELETE LBRACK RBRACK expr SEMI
 ```
