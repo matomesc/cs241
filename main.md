@@ -50,21 +50,37 @@ syms(dcl) = { <lexeme(ID), typeof(type)> }
 ```
 
 - check to make sure that `id1 != id2` for all distinct `<id1, type1>, <id2, type2> ∈ syms(procedure)`
-- now we have the following:
+- now we have the following functions:
   
   ```
   typeof(type) - declared type
-  typ(E) - type of any particular expression E
+  typ(E) - type of any particular expression E ∈ { int, int*, error }
   ```
 
-more WLPP grammar:
+more grammar:
 
 ```
 statements →
 statements → statements statement  
 statement → lvalue BECOMES expr SEMI
-statement → IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE 
-statement → WHILE LPAREN test RPAREN LBRACE statements RBRACE 
-statement → PRINTLN LPAREN expr RPAREN SEMI
-statement → DELETE LBRACK RBRACK expr SEMI
+
+lvalue → ID
+typ(ID) = t if <lexeme(ID), t> in symbol_table else error
+
+lvalue → STAR factor
+typ(lvalue) = if typ(factor) == int* then int else error
+
+expr → term
+typ(expr) = typ(term)
+
+expr → expr PLUS term
+
+term → factor
+typ(term) = typ(factor)
+
+factor → lvalue
+typ(factor) = typ(lvalue)
+
+factor → NUM
+typ(NUM) = int
 ```
