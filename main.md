@@ -83,4 +83,7 @@ typ(factor) = typ(lvalue)
 
 factor → NUM
 typ(NUM) = int
+
+factor → ID
+typ(ID) = t if <lexeme(ID), t> in symbol_table else error
 ```
