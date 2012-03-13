@@ -17,20 +17,20 @@ Code fragment code (procedure) from syntax directed translation
 Epilogue
 ```
 
-Prologue:
+## Prologue
 
 - prologue establishes conventions
 - save registers
 - capture parameters
 - anything else than needs to get setup
 
-Epilogue:
+## Epilogue
 
 - restore registers
 - produce the result
 - utility procedures (for instance an external print procedure for stdout)
 
-Conventions:
+## Conventions
 
 - self imposed rules to make everybody get along
 - how is data going to be represented?
@@ -38,4 +38,34 @@ Conventions:
   - how are expressions going to be represented?
   - how are registers to be used for __parameters__ and __results__?
 
-Suggested Conventions (also [here](http://www.student.cs.uwaterloo.ca/~cs241/))
+## Suggested Conventions
+Can also be found [here](http://www.student.cs.uwaterloo.ca/~cs241/))
+
+## Prologue Code Generation
+
+- save registers
+- set $11, $4
+- allocate memory on stack for __all variables__
+  - the __symbol table__ will tell us this information
+  - use __stack__
+  - subtract `$4 * n` from the stack pointer `$30`
+
+  ```
+  // allocating a stack frame
+  
+  ====== <-$30 (after)  
+  (stack frame)  
+  ====== <-$30 (initial)  
+
+
+  ======
+  ```
+  
+## Epilogue Code Generation
+
+It basically has to undo the prologue.
+
+- add `4n` to the stack pointer `$30`
+- restore registers (except $3 which will store the procedure's result)
+- `jr $31`
+- also include library procedures here such as `print`
