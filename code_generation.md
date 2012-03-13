@@ -8,3 +8,22 @@ WLPP Source -> Scanner -> Token List -> Parser -> WLPPI file -> Context-Sensitiv
 ```
 
 Pretty much every single one can error.
+
+```
+Procedure -> asm file (stdout):
+
+Prologue
+__Code fragment__ code (procedure) from syntax directed translation
+Epilogue
+```
+
+Prologue:
+- prologue establishes conventions
+- save registers
+- capture parameters
+- anything else than needs to get setup
+
+Epilogue:
+- restore registers
+- produce the result
+- utility procedures (for instance an external print procedure for stdout)
