@@ -13,7 +13,7 @@ Pretty much every single one can error.
 Procedure -> asm file (stdout):
 
 Prologue
-__Code fragment__ code (procedure) from syntax directed translation
+Code fragment code (procedure) from syntax directed translation
 Epilogue
 ```
 
