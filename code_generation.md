@@ -151,3 +151,67 @@ lis $5
 .word offset
 add $3, $29, $5
 ```
+
+### lvalue -> * factor
+
+```
+assert(typ(factor) == int *)
+// since * factor is a pointer and lvalue is also a pointer, there is nothing to be done
+code(lvalue) = code(factor)
+```
+
+### dcls -> dcls dcl = NUM;
+
+```
+assert dcl declares an int variable
+```
+code(dcl) returns address of returned variable
+
+- do same thing as assigment:
+
+code(dcl):
+
+```
+sw $30, -4($30)
+sub $3, $30, $4
+
+code(NUM)
+
+add $30, $30, $4
+lw $5, -4($30)
+sw $3, 0($5)
+```
+
+### dcl -> type ID
+
+- same as lvalue -> ID
+
+```
+lis $5
+.word offset(ID)
+add $3, $29, $5
+```
+
+### procedure -> INT WAIN ... dcl1 ... dcl1 ... dcls ... statements ... expr
+
+This is the __meat__
+
+```
+// this returns an lvalue
+// it is also the first parameter to the procedure
+code(dcl1)
+// store it
+sw $1, 0($3)
+
+// 2nd parameter
+code(dcl2)
+// store it
+sw $2, 0($3)
+
+code(dcls)
+
+code(statements)
+
+// final result that goes into $3
+code(expr)
+```
