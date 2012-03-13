@@ -3,7 +3,7 @@
 Summary so far:
 
 ```
-WLPP Source -> Scanner -> Token List -> Parser -> WLPPI file -> Context-Sensitive analysis + Code generation
+WLPP Source -> Scanner -> Token List -> Parser -> WLPPI file -> Context-Sensitive analysis (using the parse tree) + Code generation
     -> asm file -> CS241.binasm -> MIPS binary -> mips.twoints
 ```
 
