@@ -96,10 +96,58 @@ lis $3
 Oh how are we gonna represent pointer? Well an `int *` is an address and `NULL` is represented by address 0.
 This is just a convention.
 
-Then all we need to do to represent `NULL` is:
-
-Zero the register:
+Then all we need to do to represent `NULL` is zero the result register:
 
 ```
 sub $3, $3, $3
+```
+
+### factor -> ( expr )
+
+`code(factor) = code (expr)`
+
+### statement -> lvalue = expr;
+
+We know how to generate `expr`. But how do we generate `lvalue`? (lvalue is the left hand side of an expression).  
+We want the lvalue to return an address in RAM ie. store the address in $3.
+
+code(lvalue):
+
+```
+sw $3, -4($30)
+sub $30, $30, $4
+
+code(expr) // has result in $3
+
+add $30, $30, $4
+lw $5, -4($30)
+sw $3, 0($5)
+```
+
+This could have easily been done by returning `lvalue` in register `$5` to save us from messing with the stack.
+
+### factor -> & lvalue
+
+```
+assert(typ(lvalue) == int)
+
+```
+
+Since the lvalue has already been generated, there is nothing else to do so `code(factor) = code(lvalue)`
+
+### factor1 -> * factor2
+
+```
+assert(typ(factor2)) == int *)
+lw $3, 0($3)
+```
+
+### lvalue -> ID
+
+- find the offset of `ID` in the symbol table. This offset should be relative to `$29` (stack frame pointer)
+
+```
+lis $5
+.word offset
+add $3, $29, $5
 ```
