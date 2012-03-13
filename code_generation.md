@@ -69,3 +69,37 @@ It basically has to undo the prologue.
 - restore registers (except $3 which will store the procedure's result)
 - `jr $31`
 - also include library procedures here such as `print`
+
+## Code Generation for Declarations, Statements & Expressions
+
+### factor -> ID
+
+- lookup factor in symbol table
+- `offset(ID)` is assigned offset in frame for ID
+- get that result into $3
+
+code for factor:
+
+```
+lw $3, offset($29)
+```
+
+### factor -> NUM
+
+```
+lis $3
+.word value(NUM)
+```
+
+### factor -> NULL
+
+Oh how are we gonna represent pointer? Well an `int *` is an address and `NULL` is represented by address 0.
+This is just a convention.
+
+Then all we need to do to represent `NULL` is:
+
+Zero the register:
+
+```
+sub $3, $3, $3
+```
