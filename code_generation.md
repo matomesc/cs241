@@ -287,3 +287,40 @@ mult $5, $3 // result goes into HI, LO so we have to move em from there
 
 mflo $3
 ```
+
+### factor -> NEW INT [ expr ]
+
+- create heap in prologue
+- allocate `n` bytes where `n` is result of expr
+- how are we gonna accomplish this? two library functions we'll write: `malloc`
+- the call to `malloc` needs to be in epilogue
+
+```
+code(expr)
+add $1, $3, $3
+add $1, $1, $1 // put 4 * $3 in $1
+// call malloc, and result is in $3
+lis $3
+.word malloc
+jalr $3
+```
+
+### statement -> DELETE [ ] expr ;
+
+```
+code(expr)
+add $1, $3, $0
+lis $3
+.word free // assume we have a function called free in the epilogue
+jalr $3
+```
+
+### statement -> PRINTLN ( expr ) ;
+
+```
+code(expr)
+add $1, $3, $0
+lis $3
+.word println // again assume println function in epilogue
+jalr $3
+```
