@@ -422,7 +422,7 @@ done:
 ```
 
 This won't work because if we have nested if-else statements, we will have duplicate labels. The easiest way around this
-is to write a `nextLabel()` function to generate a unique number prefix for every label.
+is to write a `nextLabel()` function to generate a unique number suffix for every label.
 
 Another implementation is:
 
