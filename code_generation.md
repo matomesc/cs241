@@ -215,3 +215,46 @@ code(statements)
 // final result that goes into $3
 code(expr)
 ```
+
+### expr -> expr - or + token
+
+case 1: `typ(expr) = typ(term) = int`
+
+```
+code(expr) // result in $3
+sw $3, -4($30)
+sub $30, $30, $4 // push $3 on stack
+code(term) // result in $3
+add $30, $30, $4 // pop stack
+lw $5, -4($30) // into $5
+sub $3, $5, $3 // for -
+add $3, $5, $3 // for +
+```
+
+case 2: `typ(expr) = int*, typ(term) = int`
+
+```
+code(expr)
+sw $3, -4($30)
+sub $30, $30, $4
+code(term)
+add $3, $3, $3
+add $3, $3, $3 // multiply by 4
+add $30, $30, $4
+lw $5, -4($30)
+add $3, $5, $3
+```
+
+case 3: `typ(expr) = int, typ(term) = int*`
+
+```
+code(term)
+sw $3, -4($30)
+sub $30, $30, $4
+code(expr)
+add $3, $3, $3
+add $3, $3, $3 // multiply by 4
+add $30, $30, $4
+lw $5, -4($30)
+add $3, $5, $3
+```
