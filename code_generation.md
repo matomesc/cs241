@@ -361,6 +361,53 @@ add $1, $0, $0
 beq $3, $5, 1
 add $1, $11, $0
 add $3, $1, $0 // copy $1 to $3
+```
+
+### test -> expr1 < expr2
+
+```
+code(expr1)
+sw $3, -4($30)
+sub $30, $30, $4
+code(expr2)
+add $30, $30, $4
+lw $5, -4($30)
+slt $3, $5, $3
+```
+
+### test -> expr1 > expr2
+
+- same as above except the comparison:
+
+```
+slt $3, $3, $5
+```
+
+### test -> expr1 <= expr2
+
+- not `<=` is the same as `not >`
+
+```
+code(expr1)
+// push $3
+code(expr2)
+// pop $5
+slt $3, $3, $5 // is expr2 < expr1
+sub $3, $11, $3 // so we need to NOT this
+```
+
+### test -> expr1 >= expr2
+
+- same as above but reverse the expressions:
+
+```
+code(expr2)
+// push $3
+code(expr1)
+// pop $5
+slt $3, $3, $5 // is expr2 < expr1
+sub $3, $11, $3 // so we need to NOT this
+```
 
 ### statement -> if (test) { statements1 } else { statements2 }
 
