@@ -324,3 +324,32 @@ lis $3
 .word println // again assume println function in epilogue
 jalr $3
 ```
+
+### test -> expr1 == expr2
+
+- test is a boolean expression
+- since we don't have booleans in WLPP, we need to define some conventions for true and false
+  - a word containing `0` for false
+  - a word containing `1` for true
+- one implementation:
+
+```
+code(expr1)
+sw $3, -4($30)
+sub $30, $30, $4
+code(expr2)
+add $30, $30, $4
+lw $5, -4($30)
+add $1, $11, $0 // put 1 in $1
+beq $3, $5, 1
+add $1, $0, $0 // put 0 in $1
+add $3, $1, $0 // copy $1 to $3
+```
+
+### statement -> if (test) { statements1 } else { statements2 }
+
+```
+code(test)
+code(statements)
+code(statements)
+```
