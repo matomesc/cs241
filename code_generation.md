@@ -346,6 +346,22 @@ add $1, $0, $0 // put 0 in $1
 add $3, $1, $0 // copy $1 to $3
 ```
 
+### test -> expr1 != expr2
+
+- same code as above except return values are reversed
+
+```
+code(expr1)
+sw $3, -4($30)
+sub $30, $30, $4
+code(expr2)
+add $30, $30, $4
+lw $5, -4($30)
+add $1, $0, $0
+beq $3, $5, 1
+add $1, $11, $0
+add $3, $1, $0 // copy $1 to $3
+
 ### statement -> if (test) { statements1 } else { statements2 }
 
 ```
