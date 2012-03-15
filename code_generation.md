@@ -258,3 +258,32 @@ add $30, $30, $4
 lw $5, -4($30)
 add $3, $5, $3
 ```
+
+```
+int *a;
+int *b;
+
+a - b = (addr(a) - addr(b)) / 4
+```
+
+### term1 -> term2 * or / or % factor
+
+```
+code(term2)
+sw $3, -4($30)
+sub $30, $30, $4
+code(factor)
+add $30, $30, $4
+lw $5, -4($30)
+
+// for multiplication
+mult $5, $3 // result goes into HI, LO so we have to move em from there
+
+// for division
+// div $5, $3
+
+// for remainder
+// mfhi $3
+
+mflo $3
+```
