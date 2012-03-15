@@ -385,7 +385,7 @@ slt $3, $3, $5
 
 ### test -> expr1 <= expr2
 
-- not `<=` is the same as `not >`
+- note: `<=` is the same as `not >`
 
 ```
 code(expr1)
@@ -413,6 +413,25 @@ sub $3, $11, $3 // so we need to NOT this
 
 ```
 code(test)
-code(statements)
-code(statements)
+beq $3, $0, falsepart
+code(statements1)
+beq $0, $0, done
+falsepart:
+code(statements2)
+done:
+```
+
+This won't work because if we have nested if-else statements, we will have duplicate labels. The easiest way around this
+is to write a `nextLabel()` function to generate a unique number prefix for every label.
+
+Another implementation is:
+
+```
+code(test)
+bnq $3, $0, truepart
+code(statements2)
+beq $0, $0, done
+truepart:
+code(statements1)
+done:
 ```
