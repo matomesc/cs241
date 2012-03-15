@@ -435,3 +435,16 @@ truepart:
 code(statements1)
 done:
 ```
+
+Another limitation is that `code(statements1)` is limited to ~32k instructions due to the `beq`.
+
+### statement -> while (test) { statements }
+
+```
+loop457:
+code(test)
+beq $3, $0, done456 // random suffix
+code(statements)
+beq $0, $0, loop457
+done456:
+```
