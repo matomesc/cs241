@@ -136,4 +136,12 @@ Anyways the idea is stack based memory management sucks.
   - reclamation (reuse memory that is no longer in use)
     - identification
     - reuse
-- modify the code generator to invoke the library functions as necessary
+- modify the code generator to invoke the library functions as 
+
+__simple approach__
+
+- use heap for __fixed-sized__ allocation unsits
+  - eg. Scheme: `(cons a b)`
+
+__complex approach__
+- __varaible-sized__ allocation units
