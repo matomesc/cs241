@@ -32,6 +32,16 @@ int bar(int w) {
 - what about the __global__ `q`?
 - how to represent the procedure?
 
+### Parameters
+
+- our convention: `x` is passed as `$1` and `y` is passed as `$2`
+- easiest is to put `x, y` in RAM
+
+### Local variables
+
+- create a __frame__ for foo allocated on __stack__ whenever foo is _called_!
+- create new frame, set the __frame pointer__
+
 ### Local frame
 
 The local frame pointer will point to local variables in the __local frame__, in this case:
@@ -62,4 +72,18 @@ w
 ----
 q
 ----
+```
+
+## Nested Procedures
+
+- the most inner stack frame must also have access to previously allocated stack frames
+
+## Non-stack Memory Management
+
+- allocated storage that __persists__ beyond procedure invocation
+
+```c
+x = new int[10];  // allocate 10 words
+// ....
+delete[] x;       // free it up
 ```
