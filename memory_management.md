@@ -146,3 +146,64 @@ __simple approach__
 __complex approach__
 
 - __varaible-sized__ allocation units
+
+### Fixed-size Allocation
+
+- done in the initialization (prologue)
+- allocate a "big" area of storage from stack (just like the frame):
+
+```c
+---- <- ap
+
+ARENA
+
+---- <- end
+
+.word 0
+```
+
+- allocation for fixed size `n`:
+  - find available `n` bytes, or __fail__ (this is important)
+  - use the __slice of bread__ algorithm:
+
+```c
+start                       end
+  ^                          ^
+  | (USED)  x    (UNUSED)    |
+            ^
+      first_available
+
+if (first_available + n > end) {
+  fail()
+}
+
+avail = avail + n
+return avail - n
+```
+
+- finalization? get rid of `ARENA`
+- reuse is trivial (vacuous): `free() {}`
+- wastes space, needlessly fails
+  - this is due to fragmentation in the heap ie. `XOXOX` where `X` is used and `O` was used but was freed
+- fail only if there is not enough unused memory to satisfy the request
+- we need to keep track of unused (free) storage using an available space list:
+
+```c
+// X = used
+
+// stores pointers to the first byte of each free chunk
+// each node points to the next chunk of free space
+List = a1 -> a2 -> a3 -> a4;
+
+ a1     a2      a3     a4
+|   XXXX     XXX    XXX           |
+                              ^
+                            avail
+
+if asl != null then
+  tmp = asl
+  asl = *(asl)
+else if avail + n > end then fail
+else avail = avail + n
+  return avail - n
+```
