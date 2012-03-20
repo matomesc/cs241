@@ -97,3 +97,43 @@ What about Scheme (or almost any other modern language)?
 - we will discuss this concept in details next lecture
 - but the idea is we keep track of everything we allocated and find all the reachable data, 
   then get rid of uncreachable data
+
+Another way to get a dangling reference in C:
+
+```c
+int* dangle() {
+  int x;
+  int* y = &x;
+  return y;
+}
+
+int* a = dangle();
+
+// global fp
+----
+a
+----
+
+// dangle's fp
+----
+x
+----
+y
+----
+
+// but once dangle executes, the frame will get deleted leaving `a` dangling
+```
+
+Anyways the idea is stack based memory management sucks.
+
+## Implementing Non-stack Memory Management
+
+- build a set of library functions that implement the following on a global arena of storage (aka __heap__):
+- note this is different that priority queues which is also implemented by a heap (which is a tree data struct)
+  - initialization
+  - finalization
+  - allocation (how we get new memory)
+  - reclamation (reuse memory that is no longer in use)
+    - identification
+    - reuse
+- modify the code generator to invoke the library functions as necessary
