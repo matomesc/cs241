@@ -87,3 +87,13 @@ x = new int[10];  // allocate 10 words
 // ....
 delete[] x;       // free it up
 ```
+
+## Garbage Collection
+
+What about Scheme (or almost any other modern language)?
+
+- we only allocate memory
+- the language has built in __automatic garbage collection__ which frees unused memory
+- we will discuss this concept in details next lecture
+- but the idea is we keep track of everything we allocated and find all the reachable data, 
+  then get rid of uncreachable data
