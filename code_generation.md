@@ -277,15 +277,16 @@ add $30, $30, $4
 lw $5, -4($30)
 
 // for multiplication
-mult $5, $3 // result goes into HI, LO so we have to move em from there
+mult $5, $3 // result goes into HI/LO so we have to move em from there
+mflo $3
 
 // for division
 // div $5, $3
+// mflo $3
 
 // for remainder
+// div $5, $3
 // mfhi $3
-
-mflo $3
 ```
 
 ### factor -> NEW INT [ expr ]
