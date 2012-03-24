@@ -216,7 +216,7 @@ code(statements)
 code(expr)
 ```
 
-### expr -> expr - or + token
+### expr -> expr - or + term
 
 case 1: `typ(expr) = typ(term) = int`
 
