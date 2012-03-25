@@ -163,23 +163,17 @@ code(lvalue) = code(factor)
 ### dcls -> dcls dcl = NUM;
 
 ```
-assert dcl declares an int variable
-```
-code(dcl) returns address of returned variable
+assert(typeof dcl == int)
 
-- do same thing as assigment:
+code(dcl) // $3 now stores address of dcl's ID
 
-code(dcl):
+// load value(NUM) into $5
+lis $5
+.word value(NUM)
+// put $5 at address $3 
+sw $5, 0($3)
 
-```
-sw $30, -4($30)
-sub $3, $30, $4
-
-code(NUM)
-
-add $30, $30, $4
-lw $5, -4($30)
-sw $3, 0($5)
+code(dcls)
 ```
 
 ### dcl -> type ID
