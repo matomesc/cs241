@@ -111,16 +111,20 @@ sub $3, $3, $3
 We know how to generate `expr`. But how do we generate `lvalue`? (lvalue is the left hand side of an expression).  
 We want the lvalue to return an address in RAM ie. store the address in $3.
 
-code(lvalue):
-
 ```
+code(lvalue) // $3 now holds pointer to lvalue
+
+// push $3 on stack
 sw $3, -4($30)
 sub $30, $30, $4
 
-code(expr) // has result in $3
+code(expr) // result of expr in $3
 
+// pop $3 off stack into $5
 add $30, $30, $4
 lw $5, -4($30)
+
+// store $3 at address $5
 sw $3, 0($5)
 ```
 
