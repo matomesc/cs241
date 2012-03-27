@@ -57,7 +57,7 @@ are always safe (ie. use long branches everywhere) but some branches could defin
 
 Example:
 
-```
+```C
 if (6 != 2 * 3) {
   // ...
 }
@@ -90,7 +90,7 @@ How do we prove that x is a constant?
 
 Copy elimination:
 
-```
+```C
 // this can be optimized
 x = 2 * y + 10;
 z = 2 * y;
@@ -102,7 +102,7 @@ x = z + 10;
 
 Another example:
 
-```
+```C
 x = a[10];
 a[10] = 2;
 ```
@@ -121,3 +121,37 @@ while (t) {
 ```
 
 This _might_ make things faster if we're executing the loop a large number of times.
+
+### Strength reduction
+
+```c
+char *a, *b;
+strlen(strcat(a,b));
+```
+
+- doing concatenation for nothing!
+- represent strings as their length and value
+- if you only manipulate the length, then their value becomes dead code
+- consider the following:
+
+```c
+for (i = 0; i < 10; i++) {
+  a[i] = 2;
+}
+```
+
+- when you do a[i], you are storing 2 at `addr(a) + 4 * i`
+- the issue here is `4 * i`
+- transform it to this:
+
+```c
+t = addr(a) + 40
+for (i = 0, I = addr(a); I < t; i += 1, I += 4) {
+  // store 2 at address I
+}
+```
+
+- keeping a copy of the original `i` is useful if the value of `i` was used inside the loop (ie. `a[i] = i`)
+
+### Register usage
+
