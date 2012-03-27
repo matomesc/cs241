@@ -155,3 +155,45 @@ for (i = 0, I = addr(a); I < t; i += 1, I += 4) {
 
 ### Register usage
 
+We have 32 registers available. Suppose we use 16 to store variables.
+
+This means that these 16 variables won't be in the frame, saving us from messing with the stack frame.
+
+So, for instance, consider we need to return a variable that we have in `$22`.
+
+We could copy it to `$3`: `add $3, $22, $0`, but this is a redundant copy. We should just leave it in `$22` and next
+when we use it we should expect it in `$22`. This requires a change of our __conventions__:
+
+- result of expr can be any register: `<code, resultreg>`
+
+`expr -> expr + term`:
+
+```
+// code(expr1):
+sw $r, -4($30) // where r is resultreg(expr1)
+```
+
+- then we tell code which registers it is allowed to use: `code(expr, allow)` where `allow` is a set of registers that
+can be safely used
+
+```
+code(expr1, allow)
+code(expr2, allow) // result in is resultreg(expr2)
+code(term, allow \ resultreg(expr2)) // set difference
+// pick a register $t from allow, unless allow is empty
+add $t, $r, $s // where $r is resultreg(expr), $s = resultreg(term)
+```
+
+- sometimes if we're out of registers, this is called __register pressure__
+- managing registers is also a pretty difficult problem
+
+#### Managing registers
+
+Consider the following production:
+
+`expr -> expr + term;`
+
+Let needregs(expr) = how many registers we need to allocate good code
+
+So, `needregs(expr1) = max(needregs(expr2), needreg(term)) + 1`. Remeber to save a register for the return result
+(hence the `+ 1`)
